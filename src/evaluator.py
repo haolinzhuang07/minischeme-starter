@@ -75,6 +75,9 @@ def _chain_compare(name, fn, args):
         symbol_pair = isinstance(a, Symbol) and isinstance(b, Symbol)
         if not (numeric_pair or symbol_pair):
             raise TypeError(f'{name}: expected numbers or symbols')
+        if symbol_pair:
+            # Symbols compare by their case-sensitive names.
+            a, b = a.name, b.name
         if not fn(a, b):
             return False
     return True
@@ -300,3 +303,4 @@ def apply(proc, args):
             local.define(name, value)
         return _sequence(proc.body, local)
     raise TypeError(f'{scheme_repr(proc)} is not a procedure')
+
